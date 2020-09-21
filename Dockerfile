@@ -6,10 +6,10 @@ LABEL maintainer="Milo van der Linden - https://www.tiltshiftapps.nl"
 
 ENV SQL_ALCHEMY_DATABASE_URL "postgresql://postgres:postgres@localhost/postgres"
 ENV BACKEND_CORS_ORIGINS "http://localhost,http://localhost:4200,http://localhost:3000"
-ENV AMSTERDAM_PRIMARY_SCHOOLS = "https://schoolwijzer.amsterdam.nl/nl/api/v1/lijst/po"
-ENV AMSTERDAM_HIGH_SCHOOLS = "https://schoolwijzer.amsterdam.nl/nl/api/v1/lijst/vo"
-ENV AMSTERDAM_KINDERGARTEN = "https://schoolwijzer.amsterdam.nl/nl/api/v1/lijst/opvang"
-ENV AMSTERDAM_DAYCARE = "https://schoolwijzer.amsterdam.nl/nl/api/v1/lijst/bso"
+ENV AMSTERDAM_PRIMARY_SCHOOLS "https://schoolwijzer.amsterdam.nl/nl/api/v1/lijst/po"
+ENV AMSTERDAM_HIGH_SCHOOLS "https://schoolwijzer.amsterdam.nl/nl/api/v1/lijst/vo"
+ENV AMSTERDAM_KINDERGARTEN "https://schoolwijzer.amsterdam.nl/nl/api/v1/lijst/opvang"
+ENV AMSTERDAM_DAYCARE "https://schoolwijzer.amsterdam.nl/nl/api/v1/lijst/bso"
 
 
 RUN apt-get update && apt-get install -y \
