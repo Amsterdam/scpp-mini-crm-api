@@ -1,0 +1,36 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mini-crm-api-service
+spec:
+  selector:
+    app: mini-crm-api-service
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mini-crm-api
+  labels:
+    app: mini-crm-api-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mini-crm-api-service
+  template:
+    metadata:
+      labels:
+        app: mini-crm-api-service
+    spec:
+      imagePullSecrets:
+      - name: pipeline-docker-registry
+      containers:
+      - name: mini-crm-api-service
+        image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
+        ports:
+        - containerPort: 8000
