@@ -1,13 +1,7 @@
-import json
-from .models import DbContact, DbSchool
-from .database import SessionLocal, engine, Base
-from .settings import settings
-from geoalchemy2 import func
+from .models import DbContact
 
 
-def get_base_query():
-    db = SessionLocal()
-    Base.metadata.create_all(bind=engine)
+def get_base_query(db):
     return db.query(
         DbContact.id,
         DbContact.naam,
@@ -15,6 +9,7 @@ def get_base_query():
         DbContact.phone,
         DbContact.school_id,
     )
+
 
 def construct_result(result):
     feature_collection = []
@@ -31,6 +26,6 @@ def construct_result(result):
     return feature_collection
 
 
-def json_all():
-    result = get_base_query().all()
+def json_all(db):
+    result = get_base_query(db).all()
     return construct_result(result)

@@ -1,13 +1,9 @@
 import json
+
 from .models import DbSchool
-from .database import SessionLocal, engine, Base
-from .settings import settings
-from geoalchemy2 import func
 
 
-def get_base_query():
-    db = SessionLocal()
-    Base.metadata.create_all(bind=engine)
+def get_base_query(db):
     return db.query(
         DbSchool.id,
         DbSchool.school_id,
@@ -30,6 +26,7 @@ def get_base_query():
         DbSchool.city,
         DbSchool.point.ST_Transform(4326).ST_AsGeoJson())
 
+
 def construct_geojson(result):
     feature_collection = {
         "type": "FeatureCollection",
@@ -44,9 +41,9 @@ def construct_geojson(result):
     }
     for entry in result:
         out = {
-                "type": "Feature",
-                "id": entry[0],
-                "properties": {
+            "type": "Feature",
+            "id": entry[0],
+            "properties": {
                 "school_id": entry[1],
                 "lrkp_id": entry[2],
                 "school_type": entry[3],
@@ -84,34 +81,34 @@ def construct_result(result):
             "brin": entry[4],
             "vestigingsnummer": entry[5],
             "naam": entry[6],
-            #"grondslag": entry[7],
-            #"schoolwijzer_url": entry[8],
-            #"onderwijsconcept": entry[9],
-            #"heeft_voorschool": entry[10],
-            #"leerlingen": entry[11],
+            # "grondslag": entry[7],
+            # "schoolwijzer_url": entry[8],
+            # "onderwijsconcept": entry[9],
+            # "heeft_voorschool": entry[10],
+            # "leerlingen": entry[11],
             "address": entry[12],
-            #"postcode": entry[13],
-            #"suburb": entry[14],
-            #"website": entry[15],
-            #"email": entry[16],
-            #"phone": entry[17],
-            #"city": entry[18],
+            # "postcode": entry[13],
+            # "suburb": entry[14],
+            # "website": entry[15],
+            # "email": entry[16],
+            # "phone": entry[17],
+            # "city": entry[18],
         }
         feature_collection.append(out)
     return feature_collection
 
 
-def geojson_all():
-    result = get_base_query().all()
+def geojson_all(db):
+    result = get_base_query(db).all()
     return construct_geojson(result)
 
 
-def json_all():
-    result = get_base_query().all()
+def json_all(db):
+    result = get_base_query(db).all()
     return construct_result(result)
 
 
-def json_search(search):
-    filter = "%{}%".format(search)
-    result = get_base_query().filter(DbSchool.naam.ilike(filter)).all()
+def json_search(search, db):
+    search_filter = "%{}%".format(search)
+    result = get_base_query(db).filter(DbSchool.naam.ilike(search_filter)).all()
     return construct_result(result)
