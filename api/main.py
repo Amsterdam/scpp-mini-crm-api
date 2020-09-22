@@ -1,4 +1,4 @@
-from . import school
+from . import school, contact, note
 from fastapi import FastAPI
 from .settings import settings
 from starlette.middleware.cors import CORSMiddleware
@@ -18,3 +18,48 @@ app.add_middleware(
 @app.get("/api/v1/schools.geojson")
 def get_schools():
     return school.geojson_all()
+
+
+@app.get("/api/v1/contacts")
+def get_contacts():
+    return contact.geojson_all()
+
+
+@app.get("/api/v1/contacts/{id}")
+def get_contact(id):
+    return
+
+
+@app.post("/api/v1/contacts")
+def post_contact():
+    return
+
+
+@app.delete("/api/v1/contacts")
+def delete_contact():
+    return
+
+
+@app.get("/api/v1/notes")
+def get_notes():
+    return note.geojson_all()
+
+
+@app.get("/api/v1/notes/{id}")
+def get_note(id):
+    return
+
+
+@app.get("/api/v1/notes/{year}/{month}/{day}")
+def get_notes(year, month, day):
+    return
+
+
+@app.post("/api/v1/notes")
+def post_note():
+    return
+
+
+@app.delete("/api/v1/notes")
+def delete_note():
+    return
