@@ -38,7 +38,7 @@ app.add_middleware(
 
 @app.get("/api/v1/schools.geojson")
 def get_schools_geojson(db: Session = Depends(get_db)):
-    return school.geojson_all()
+    return school.geojson_all(db)
 
 
 @app.get("/api/v1/schools")
@@ -48,7 +48,7 @@ def get_schools_json(db: Session = Depends(get_db)):
 
 @app.get("/api/v1/schools/{search}")
 def get_schools_search_json(search, db: Session = Depends(get_db)):
-    return school.json_search(search)
+    return school.json_search(search, db)
 
 
 @app.get("/api/v1/contacts")
