@@ -16,13 +16,21 @@ app.add_middleware(
 
 
 @app.get("/api/v1/schools.geojson")
-def get_schools():
+def get_schools_geojson():
     return school.geojson_all()
 
+@app.get("/api/v1/schools")
+def get_schools_json():
+    return school.json_all()
+
+
+@app.get("/api/v1/schools/{search}")
+def get_schools_search_json(search):
+    return school.json_search(search)
 
 @app.get("/api/v1/contacts")
 def get_contacts():
-    return contact.geojson_all()
+    return contact.json_all()
 
 
 @app.get("/api/v1/contacts/{id}")
@@ -42,7 +50,7 @@ def delete_contact():
 
 @app.get("/api/v1/notes")
 def get_notes():
-    return note.geojson_all()
+    return note.json_all()
 
 
 @app.get("/api/v1/notes/{id}")

@@ -1,12 +1,13 @@
 import json
 from .models import DbSchool
-from .database import SessionLocal, engine
+from .database import SessionLocal, engine, Base
 from .settings import settings
 from geoalchemy2 import func
 
 
 def get_base_query():
     db = SessionLocal()
+    Base.metadata.create_all(bind=engine)
     return db.query(
         DbSchool.id,
         DbSchool.school_id,
@@ -71,11 +72,46 @@ def construct_geojson(result):
     return feature_collection
 
 
+def construct_result(result):
+    feature_collection = []
+    for entry in result:
+        out = {
+            "type": "School",
+            "id": entry[0],
+            "school_id": entry[1],
+            "lrkp_id": entry[2],
+            "school_type": entry[3],
+            "brin": entry[4],
+            "vestigingsnummer": entry[5],
+            "naam": entry[6],
+            #"grondslag": entry[7],
+            #"schoolwijzer_url": entry[8],
+            #"onderwijsconcept": entry[9],
+            #"heeft_voorschool": entry[10],
+            #"leerlingen": entry[11],
+            "address": entry[12],
+            #"postcode": entry[13],
+            #"suburb": entry[14],
+            #"website": entry[15],
+            #"email": entry[16],
+            #"phone": entry[17],
+            #"city": entry[18],
+        }
+        feature_collection.append(out)
+    return feature_collection
+
+
 def geojson_all():
-    
-    try:
-        result = get_base_query().all()
-    except:
-        DbSchool.__table__.create(engine)
-        result = get_base_query().all()
+    result = get_base_query().all()
     return construct_geojson(result)
+
+
+def json_all():
+    result = get_base_query().all()
+    return construct_result(result)
+
+
+def json_search(search):
+    filter = "%{}%".format(search)
+    result = get_base_query().filter(DbSchool.naam.ilike(filter)).all()
+    return construct_result(result)

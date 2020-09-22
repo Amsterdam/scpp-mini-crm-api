@@ -1,12 +1,13 @@
 import json
-from .models import DbNote
-from .database import SessionLocal, engine
+from .models import DbSchool, DbContact, DbNote
+from .database import SessionLocal, engine, Base
 from .settings import settings
 from geoalchemy2 import func
 
 
 def get_base_query():
     db = SessionLocal()
+    Base.metadata.create_all(bind=engine)
     return db.query(
         DbNote.id,
         DbNote.note,
@@ -26,11 +27,6 @@ def construct_result(result):
     return feature_collection
 
 
-def geojson_all():
-    
-    try:
-        result = get_base_query().all()
-    except:
-        DbNote.__table__.create(engine)
-        result = get_base_query().all()
+def json_all():
+    result = get_base_query().all()
     return construct_result(result)
