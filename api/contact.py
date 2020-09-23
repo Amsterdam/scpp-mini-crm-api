@@ -18,7 +18,7 @@ def construct_result(result):
         out = {
             "type": "Contact",
             "id": entry[0],
-            "naam": entry[1],
+            "name": entry[1],
             "email": entry[2],
             "phone": entry[3],
             "school_id": entry[4]

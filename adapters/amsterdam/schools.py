@@ -34,7 +34,7 @@ def run_po():
                 brin = entry["brin"],
                 vestigingsnummer = entry["vestigingsnummer"],
                 school_type = "po",
-                naam = entry["naam"],
+                name = entry["naam"],
                 grondslag = entry["grondslag"],
                 schoolwijzer_url = entry["schoolwijzer_url"],
                 address = entry["adres"]["adres"],
