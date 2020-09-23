@@ -1,8 +1,24 @@
 from geoalchemy2 import Geometry
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, func
 from sqlalchemy.orm import relationship
-
+from pydantic import BaseModel
 from .database import Base
+
+class ContactBase(BaseModel):
+    name: str
+
+
+class ContactCreate(ContactBase):
+    phone: str
+    email: str
+    school_id: int
+
+
+class Contact(ContactBase):
+    id: int
+
+    class Config: 
+        orm_mode = True
 
 
 class DbContact(Base):

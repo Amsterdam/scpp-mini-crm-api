@@ -5,6 +5,7 @@ from starlette.middleware.cors import CORSMiddleware
 from . import school, contact, note
 from .database import SessionLocal, engine, Base
 from .settings import settings
+from .models import Contact, ContactCreate, DbContact
 
 Base.metadata.create_all(bind=engine)
 
@@ -62,8 +63,17 @@ def get_contact(id, db: Session = Depends(get_db)):
 
 
 @app.post("/api/v1/contacts")
-def post_contact(db: Session = Depends(get_db)):
-    return
+async def post_contact(contact: ContactCreate, db: Session = Depends(get_db)):
+    if contact.school_id > 0:
+        Contact = DbContact(naam=contact.name, email=contact.email, phone=contact.phone, school_id=contact.school_id)
+    else:
+        Contact = DbContact(naam=contact.name, email=contact.email, phone=contact.phone)
+
+    db.add(Contact)
+    db.commit()
+    db.refresh(Contact)
+    print(Contact)
+    return Contact
 
 
 @app.delete("/api/v1/contacts")
