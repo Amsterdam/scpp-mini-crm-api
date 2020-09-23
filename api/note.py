@@ -16,12 +16,12 @@ def construct_result(result):
             "type": "Note",
             "id": entry[0],
             "note": entry[1],
-            "contact_id": entry[4]
+            "contact_id": entry[2]
         }
         feature_collection.append(out)
     return feature_collection
 
 
-def json_all(db):
-    result = get_base_query(db).all()
+def json_by_contact_id(contact_id, db):
+    result = get_base_query(db).filter(DbNote.contact_id == contact_id).all()
     return construct_result(result)

@@ -5,7 +5,7 @@ from starlette.middleware.cors import CORSMiddleware
 from . import school, contact, note
 from .database import SessionLocal, engine, Base
 from .settings import settings
-from .models import Contact, ContactCreate, DbContact
+from .models import Contact, ContactCreate, DbContact, Note, NoteCreate, DbNote
 
 Base.metadata.create_all(bind=engine)
 
@@ -57,50 +57,37 @@ def get_contacts(db: Session = Depends(get_db)):
     return contact.json_all(db)
 
 
-@app.get("/api/v1/contacts/{id}")
+@app.get("/api/v1/contacts/{search}")
+def get_contacts_search_json(search, db: Session = Depends(get_db)):
+    return contact.json_search(search, db)
+
+
+@app.get("/api/v1/contact/{id}")
 def get_contact(id, db: Session = Depends(get_db)):
-    return
+    return contact.json_by_id(id, db)
 
 
-@app.post("/api/v1/contacts")
+@app.post("/api/v1/contact")
 async def post_contact(contact: ContactCreate, db: Session = Depends(get_db)):
     if contact.school_id > 0:
         Contact = DbContact(naam=contact.name, email=contact.email, phone=contact.phone, school_id=contact.school_id)
     else:
         Contact = DbContact(naam=contact.name, email=contact.email, phone=contact.phone)
-
     db.add(Contact)
     db.commit()
     db.refresh(Contact)
-    print(Contact)
     return Contact
 
 
-@app.delete("/api/v1/contacts")
-def delete_contact(db: Session = Depends(get_db)):
-    return
+@app.get("/api/v1/notes/{contact_id}")
+def get_notes(contact_id, db: Session = Depends(get_db)):
+    return note.json_by_contact_id(contact_id, db)
 
 
-@app.get("/api/v1/notes")
-def get_notes(db: Session = Depends(get_db)):
-    return note.json_all(db)
-
-
-@app.get("/api/v1/notes/{id}")
-def get_note(id, db: Session = Depends(get_db)):
-    return
-
-
-@app.get("/api/v1/notes/{year}/{month}/{day}")
-def get_notes(year, month, day, db: Session = Depends(get_db)):
-    return
-
-
-@app.post("/api/v1/notes")
-def post_note(db: Session = Depends(get_db)):
-    return
-
-
-@app.delete("/api/v1/notes")
-def delete_note(db: Session = Depends(get_db)):
-    return
+@app.post("/api/v1/note")
+async def post_note(note: NoteCreate, db: Session = Depends(get_db)):
+    Note = DbNote(note=note.note, contact_id=note.contact_id)
+    db.add(Note)
+    db.commit()
+    db.refresh(Note)
+    return Note

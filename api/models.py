@@ -34,6 +34,18 @@ class DbContact(Base):
     notes = relationship("DbNote")
 
 
+class NoteCreate(BaseModel):
+    note: str
+    contact_id: int
+
+
+class Note(NoteCreate):
+    id: int
+
+    class Config: 
+        orm_mode = True
+
+
 class DbNote(Base):
     __tablename__ = "notes"
     id = Column(Integer, index=True, primary_key=True)
