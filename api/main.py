@@ -2,7 +2,7 @@ from fastapi import Depends, FastAPI, Request, Response
 from sqlalchemy.orm import Session
 from starlette.middleware.cors import CORSMiddleware
 
-from . import school, contact, note
+from . import school, contact, note, search
 from .database import SessionLocal, engine, Base
 from .settings import settings
 from .models import Contact, ContactCreate, DbContact, Note, NoteCreate, DbNote
@@ -91,3 +91,15 @@ async def post_note(note: NoteCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(Note)
     return Note
+
+
+@app.get("/api/v1/search/{key}")
+def get_search_json(key, db: Session = Depends(get_db)):
+    return search.json_search(key, db)
+
+
+@app.get("/api/v1/search/")
+def get_search_empty():
+    return []
+
+
