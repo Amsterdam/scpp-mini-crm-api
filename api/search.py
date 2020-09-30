@@ -24,6 +24,7 @@ def construct_result(schoolresult, contactresult):
             "avatar": "/data/teacher.svg",
             "id": "school_" + str(entry[0]),
             "name": entry[1],
+            "type": "contact"
         }
         feature_collection.append(out)
     for entry in schoolresult:
@@ -31,6 +32,7 @@ def construct_result(schoolresult, contactresult):
             "avatar": "/data/school.svg",
             "id": "teacher_" + str(entry[0]),
             "name": entry[1],
+            "type": "school"
         }
         feature_collection.append(out)
     return feature_collection
