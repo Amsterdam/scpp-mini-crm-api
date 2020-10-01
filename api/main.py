@@ -1,11 +1,11 @@
-from fastapi import Depends, FastAPI, Request, Response
+from fastapi import Depends, FastAPI, Request, Response, HTTPException
 from sqlalchemy.orm import Session
 from starlette.middleware.cors import CORSMiddleware
-
+from sqlalchemy.exc import IntegrityError
 from . import school, contact, note, search
 from .database import SessionLocal, engine, Base
 from .settings import settings
-from .models import Contact, ContactCreate, DbContact, Note, NoteCreate, DbNote
+from .models import Contact, ContactCreate, DbContact, Note, NoteCreate, DbNote, EnhancedNoteCreate, DbEnhancedNote
 
 Base.metadata.create_all(bind=engine)
 
@@ -69,13 +69,16 @@ def get_contact(id, db: Session = Depends(get_db)):
 
 @app.post("/api/v1/contact")
 async def post_contact(contact: ContactCreate, db: Session = Depends(get_db)):
-    if contact.school_id > 0:
+    if contact.school_id and contact.school_id > 0:
         Contact = DbContact(naam=contact.name, email=contact.email, phone=contact.phone, school_id=contact.school_id)
     else:
         Contact = DbContact(naam=contact.name, email=contact.email, phone=contact.phone)
     db.add(Contact)
-    db.commit()
-    db.refresh(Contact)
+    try:
+        db.commit()
+        db.refresh(Contact)
+    except IntegrityError:
+        raise HTTPException(status_code=500, detail="Duplicate Contact, did you mean to update?")
     return Contact
 
 
@@ -87,6 +90,19 @@ def get_notes(contact_id, db: Session = Depends(get_db)):
 @app.post("/api/v1/note")
 async def post_note(note: NoteCreate, db: Session = Depends(get_db)):
     Note = DbNote(note=note.note, contact_id=note.contact_id)
+    db.add(Note)
+    db.commit()
+    db.refresh(Note)
+    return Note
+
+
+@app.post("/api/v2/note")
+async def post_enhanced_note(note: EnhancedNoteCreate, db: Session = Depends(get_db)):
+    Note = DbEnhancedNote(note=note.note, start=note.start, end=note.end)
+    # Check for tags; check database for existing tags and generate new ones when needed.
+    if note.tags:
+        existing_tags = db.query(DBTag).filter(DBTag.tag.in_(note.tags)).all()
+        print(existing_tags)
     db.add(Note)
     db.commit()
     db.refresh(Note)
