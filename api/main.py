@@ -82,6 +82,11 @@ async def post_contact(contact: ContactCreate, db: Session = Depends(get_db)):
     return Contact
 
 
+@app.get("/api/v1/notes")
+def get_notes_all(db: Session = Depends(get_db)):
+    return note.json_all(db)
+
+
 @app.get("/api/v1/notes/{contact_id}")
 def get_notes(contact_id, db: Session = Depends(get_db)):
     return note.json_by_contact_id(contact_id, db)
