@@ -83,8 +83,6 @@ class DbNote(Base):
     __tablename__ = "notes"
     id = Column(Integer, index=True, primary_key=True)
     note = Column(String)
-    start = Column(DateTime(timezone=True), server_default=func.now())
-    end = Column(DateTime(timezone=True), server_default=func.now())
     contact_id = Column(Integer, ForeignKey('contacts.id'))
     contact = relationship("DbContact", back_populates="notes")
     created_at = Column(DateTime(timezone=True), server_default=func.now())
