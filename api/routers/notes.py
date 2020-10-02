@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
-from api.models import Note, NoteCreate, DbNote, EnhancedNoteCreate, DbEnhancedNote, DbTag
+from api.models import Note, NoteCreate, DbNote, EnhancedNoteCreate, DbEnhancedNote, DbTag, DbSchool, DbContact
 from api import note
 
 router = APIRouter()
@@ -37,7 +37,6 @@ async def post_enhanced_note(note: EnhancedNoteCreate, db: Session = Depends(get
     if note.tags:
         # First get an array of the existing tags
         existing_tags = db.query(DbTag).filter(DbTag.tag.in_(note.tags)).all()
-        print(existing_tags)
         Note.tags.extend(existing_tags)
         for each in note.tags:
             present = False
@@ -50,7 +49,16 @@ async def post_enhanced_note(note: EnhancedNoteCreate, db: Session = Depends(get
             if present == False:
                 tag = db.merge(DbTag(tag=each))
                 Note.tags.append(tag)
-                print(tag)
+        # Check for tags; check database for existing tags and generate new ones when needed
+    if note.schools:
+        # First get an array of the existing tags
+        schools = db.query(DbSchool).filter(DbSchool.id.in_(note.schools)).all()
+        Note.schools.extend(schools)
+    
+    if note.contacts:
+        # First get an array of the existing tags
+        contacts = db.query(DbContact).filter(DbContact.id.in_(note.contacts)).all()
+        Note.contacts.extend(contacts)
 
     db.add(Note)
     db.commit()

@@ -145,6 +145,8 @@ class DbTag(Base):
 class EnhancedNoteBase(BaseModel):
     note: str
     tags: Optional[List[str]]
+    contacts: Optional[List[int]]
+    schools: Optional[List[int]]
 
 
 class EnhancedNoteCreate(EnhancedNoteBase):
