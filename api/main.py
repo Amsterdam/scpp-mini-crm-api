@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from . import school, contact, note, search
 from .database import SessionLocal, engine, Base
 from .settings import settings
-from .models import Contact, ContactCreate, DbContact, Note, NoteCreate, DbNote, EnhancedNoteCreate, DbEnhancedNote
+from .models import Contact, ContactCreate, DbContact, Note, NoteCreate, DbNote, EnhancedNoteCreate, DbEnhancedNote, DbTag
 
 Base.metadata.create_all(bind=engine)
 
@@ -38,32 +38,32 @@ app.add_middleware(
 
 
 @app.get("/api/v1/schools.geojson")
-def get_schools_geojson(db: Session = Depends(get_db)):
+def get_all_schools_in_geojson_format(db: Session = Depends(get_db)):
     return school.geojson_all(db)
 
 
 @app.get("/api/v1/schools")
-def get_schools_json(db: Session = Depends(get_db)):
+def get_all_schools(db: Session = Depends(get_db)):
     return school.json_all(db)
 
 
 @app.get("/api/v1/schools/{search}")
-def get_schools_search_json(search, db: Session = Depends(get_db)):
+def search_for_schools(search, db: Session = Depends(get_db)):
     return school.json_search(search, db)
 
 
 @app.get("/api/v1/contacts")
-def get_contacts(db: Session = Depends(get_db)):
+def get_all_contacts(db: Session = Depends(get_db)):
     return contact.json_all(db)
 
 
 @app.get("/api/v1/contacts/{search}")
-def get_contacts_search_json(search, db: Session = Depends(get_db)):
+def searh_for_contacts(search, db: Session = Depends(get_db)):
     return contact.json_search(search, db)
 
 
 @app.get("/api/v1/contact/{id}")
-def get_contact(id, db: Session = Depends(get_db)):
+def get_contact_by_id(id, db: Session = Depends(get_db)):
     return contact.json_by_id(id, db)
 
 
@@ -83,12 +83,12 @@ async def post_contact(contact: ContactCreate, db: Session = Depends(get_db)):
 
 
 @app.get("/api/v1/notes")
-def get_notes_all(db: Session = Depends(get_db)):
+def get_all_notes(db: Session = Depends(get_db)):
     return note.json_all(db)
 
 
 @app.get("/api/v1/notes/{contact_id}")
-def get_notes(contact_id, db: Session = Depends(get_db)):
+def get_notes_by_contact_id(contact_id, db: Session = Depends(get_db)):
     return note.json_by_contact_id(contact_id, db)
 
 
@@ -104,10 +104,25 @@ async def post_note(note: NoteCreate, db: Session = Depends(get_db)):
 @app.post("/api/v2/note")
 async def post_enhanced_note(note: EnhancedNoteCreate, db: Session = Depends(get_db)):
     Note = DbEnhancedNote(note=note.note, start=note.start, end=note.end)
-    # Check for tags; check database for existing tags and generate new ones when needed.
+    # Check for tags; check database for existing tags and generate new ones when needed
     if note.tags:
-        existing_tags = db.query(DBTag).filter(DBTag.tag.in_(note.tags)).all()
+        # First get an array of the existing tags
+        existing_tags = db.query(DbTag).filter(DbTag.tag.in_(note.tags)).all()
         print(existing_tags)
+        Note.tags.extend(existing_tags)
+        for each in note.tags:
+            present = False
+
+            for existing_tag in existing_tags:
+                if present == False and existing_tag.tag == each:
+                    #tag is already present
+                    present = True
+
+            if present == False:
+                tag = db.merge(DbTag(tag=each))
+                Note.tags.append(tag)
+                print(tag)
+
     db.add(Note)
     db.commit()
     db.refresh(Note)
@@ -115,12 +130,5 @@ async def post_enhanced_note(note: EnhancedNoteCreate, db: Session = Depends(get
 
 
 @app.get("/api/v1/search/{key}")
-def get_search_json(key, db: Session = Depends(get_db)):
+def search_schools_and_contacts(key, db: Session = Depends(get_db)):
     return search.json_search(key, db)
-
-
-@app.get("/api/v1/search/")
-def get_search_empty():
-    return []
-
-

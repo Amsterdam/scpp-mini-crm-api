@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from geoalchemy2 import Geometry
 from sqlalchemy import Table, Boolean, Column, ForeignKey, Integer, String, DateTime, func
 from sqlalchemy.orm import relationship
@@ -8,23 +8,29 @@ from datetime import datetime
 
 # Contacts related to enhanced notes
 enhanced_note_contact_table = Table('enhanced_note_contact', Base.metadata,
-    Column('contact_id', Integer, ForeignKey('contacts.id')),
-    Column('enhanced_note_id', Integer, ForeignKey('enhanced_notes.id'))
-)
+                                    Column('contact_id', Integer,
+                                           ForeignKey('contacts.id')),
+                                    Column('enhanced_note_id', Integer,
+                                           ForeignKey('enhanced_notes.id'))
+                                    )
 
 
 # Tags related to enhanced notes
 enhanced_note_tag_table = Table('enhanced_note_tag', Base.metadata,
-    Column('tag_id', Integer, ForeignKey('tags.id')),
-    Column('enhanced_note_id', Integer, ForeignKey('enhanced_notes.id'))
-)
+                                Column('tag_id', Integer,
+                                       ForeignKey('tags.id')),
+                                Column('enhanced_note_id', Integer,
+                                       ForeignKey('enhanced_notes.id'))
+                                )
 
 
 # Schools related to enhanced notes
 enhanced_note_school_table = Table('enhanced_note_school', Base.metadata,
-    Column('school_id', Integer, ForeignKey('schools.id')),
-    Column('enhanced_note_id', Integer, ForeignKey('enhanced_notes.id'))
-)
+                                   Column('school_id', Integer,
+                                          ForeignKey('schools.id')),
+                                   Column('enhanced_note_id', Integer,
+                                          ForeignKey('enhanced_notes.id'))
+                                   )
 
 
 class ContactBase(BaseModel):
@@ -40,7 +46,7 @@ class ContactCreate(ContactBase):
 class Contact(ContactBase):
     id: int
 
-    class Config: 
+    class Config:
         orm_mode = True
 
 
@@ -69,8 +75,9 @@ class NoteCreate(BaseModel):
 class Note(NoteCreate):
     id: int
 
-    class Config: 
+    class Config:
         orm_mode = True
+
 
 class DbNote(Base):
     __tablename__ = "notes"
@@ -105,7 +112,8 @@ class DbSchool(Base):
     email = Column(String)  # adres/email
     phone = Column(String)  # adres/telefoon
     city = Column(String)  # adres/plaats
-    point = Column(Geometry(geometry_type='POINT', srid=4326))  # coordinaten/lat & coordinaten/lon
+    # coordinaten/lat & coordinaten/lon
+    point = Column(Geometry(geometry_type='POINT', srid=4326))
     contacts = relationship("DbContact")
     enhanced_notes = relationship(
         "DbEnhancedNote",
@@ -120,14 +128,14 @@ class TagCreate(BaseModel):
 class Tag(TagCreate):
     id: int
 
-    class Config: 
+    class Config:
         orm_mode = True
 
 
 class DbTag(Base):
     __tablename__ = "tags"
     id = Column(Integer, index=True, primary_key=True)
-    tag = Column(String, primary_key=True)
+    tag = Column(String, unique=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     enhanced_notes = relationship(
@@ -138,7 +146,8 @@ class DbTag(Base):
 
 class EnhancedNoteBase(BaseModel):
     note: str
-    tags: Optional[]
+    tags: Optional[List[str]]
+
 
 class EnhancedNoteCreate(EnhancedNoteBase):
     start: Optional[datetime]
@@ -148,7 +157,7 @@ class EnhancedNoteCreate(EnhancedNoteBase):
 class EnhancedNote(EnhancedNoteCreate):
     id: int
 
-    class Config: 
+    class Config:
         orm_mode = True
 
 
@@ -175,4 +184,3 @@ class DbEnhancedNote(Base):
         "DbContact",
         secondary=enhanced_note_contact_table,
         back_populates="enhanced_notes")
-
