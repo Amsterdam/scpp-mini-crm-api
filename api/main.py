@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from starlette.middleware.cors import CORSMiddleware
 from sqlalchemy.exc import IntegrityError
 from . import contact, search
-from .routers import notes, schools, contacts, search
+from .routers import notes, schools, contacts, search, tags
 from .database import SessionLocal, engine, Base
 from .settings import settings
 
@@ -41,3 +41,4 @@ app.include_router(notes.router)
 app.include_router(schools.router)
 app.include_router(contacts.router)
 app.include_router(search.router)
+app.include_router(tags.router)
