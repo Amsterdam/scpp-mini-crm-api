@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 from api.models import Note, NoteCreate, DbNote, EnhancedNoteCreate, DbEnhancedNote, DbTag, DbSchool, DbContact
-from api import note
+from api import note, enhanced_note
 
 router = APIRouter()
 
@@ -28,6 +28,11 @@ async def post_note(note: NoteCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(Note)
     return Note
+
+
+@router.get("/api/v2/notes")
+def get_all_enhanced_notes(db: Session = Depends(get_db)):
+    return enhanced_note.json_all(db)
 
 
 @router.post("/api/v2/note")
