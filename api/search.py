@@ -22,7 +22,8 @@ def construct_result(schoolresult, contactresult):
     for entry in contactresult:
         out = {
             "avatar": "/data/teacher.svg",
-            "id": "school_" + str(entry[0]),
+            "id": entry[0],
+            "key": "teacher_" + str(entry[0]),
             "name": entry[1],
             "type": "contact"
         }
@@ -30,7 +31,8 @@ def construct_result(schoolresult, contactresult):
     for entry in schoolresult:
         out = {
             "avatar": "/data/school.svg",
-            "id": "teacher_" + str(entry[0]),
+            "id": entry[0],
+            "key": "school_" + str(entry[0]),
             "name": entry[1],
             "type": "school"
         }
