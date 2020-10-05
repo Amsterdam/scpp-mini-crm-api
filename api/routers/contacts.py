@@ -14,17 +14,17 @@ def get_db(request: Request):
     return request.state.db
 
 
-@router.get("/api/v1/contacts", response_model=List[ContactResponse], response_model_exclude_none=True)
+@router.get("/api/v1/contacts", response_model=List[ContactResponse], response_model_exclude_none=True, response_model_by_alias=False)
 def get_all_contacts(db: Session = Depends(get_db)):
     return contact.json_all(db)
 
 
-@router.get("/api/v1/contacts/{search}", response_model=List[ContactResponse])
+@router.get("/api/v1/contacts/{search}", response_model=List[ContactResponse], response_model_by_alias=False)
 def searh_for_contacts(search, db: Session = Depends(get_db)):
     return contact.json_search(search, db)
 
 
-@router.get("/api/v1/contact/{id}", response_model=ContactResponse)
+@router.get("/api/v1/contact/{id}", response_model=ContactResponse, response_model_by_alias=False)
 def get_contact_by_id(id, db: Session = Depends(get_db)):
     return contact.json_by_id(id, db)
 
