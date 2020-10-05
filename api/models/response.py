@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 class TagResponse(BaseModel):
     id: int
     tag: str
-    notes: Optional[int]
+    notes: Optional[int] = 0
 
     class Config:
         orm_mode = True

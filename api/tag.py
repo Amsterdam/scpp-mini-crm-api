@@ -6,8 +6,8 @@ def get_base_query(db):
     return db.query(
         DbTag.id,
         DbTag.tag,
-        func.count('enhanced_note_tag.enhanced_note_id')
-    ).join(enhanced_note_tag_table)
+        func.count(enhanced_note_tag_table.c['enhanced_note_id'])
+    ).join(enhanced_note_tag_table, isouter=True)
 
 
 def construct_result(result):
