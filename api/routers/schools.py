@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, Request
+from typing import List
 from sqlalchemy.orm import Session
 from api import school
+from api.models.response import SchoolResponse
 
 router = APIRouter()
 

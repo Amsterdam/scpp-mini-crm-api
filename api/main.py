@@ -1,8 +1,5 @@
-from fastapi import Depends, FastAPI, Request, Response, HTTPException
-from sqlalchemy.orm import Session
+from fastapi import Depends, FastAPI, Request, Response
 from starlette.middleware.cors import CORSMiddleware
-from sqlalchemy.exc import IntegrityError
-from . import contact, search
 from .routers import notes, schools, contacts, search, tags
 from .database import SessionLocal, engine, Base
 from .settings import settings

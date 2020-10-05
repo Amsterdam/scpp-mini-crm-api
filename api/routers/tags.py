@@ -1,6 +1,8 @@
+from typing import List
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
-from api.models import Note, NoteCreate, DbNote, EnhancedNoteCreate, DbEnhancedNote, DbTag, DbSchool, DbContact
+from api.models.response import TagResponse
+
 from api import tag
 
 router = APIRouter()
@@ -11,6 +13,6 @@ def get_db(request: Request):
     return request.state.db
 
 
-@router.get("/api/v1/tags")
+@router.get("/api/v1/tags", response_model=List[TagResponse])
 def get_all_tags(db: Session = Depends(get_db)):
     return tag.json_all(db)

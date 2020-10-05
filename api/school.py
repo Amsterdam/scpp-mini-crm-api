@@ -1,6 +1,6 @@
 import json
 
-from .models import DbSchool
+from api.models.tables import DbSchool
 
 
 def get_base_query(db):

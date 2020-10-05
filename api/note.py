@@ -1,4 +1,4 @@
-from .models import DbNote
+from .models.tables import DbNote
 
 
 def get_base_query(db):
@@ -21,9 +21,11 @@ def construct_result(result):
         feature_collection.append(out)
     return feature_collection
 
+
 def json_all(db):
     result = get_base_query(db).all()
     return construct_result(result)
+
 
 def json_by_contact_id(contact_id, db):
     result = get_base_query(db).filter(DbNote.contact_id == contact_id).all()

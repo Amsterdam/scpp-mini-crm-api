@@ -1,10 +1,8 @@
-from typing import Optional, List
 from geoalchemy2 import Geometry
 from sqlalchemy import Table, Boolean, Column, ForeignKey, Integer, String, DateTime, func
 from sqlalchemy.orm import relationship
-from pydantic import BaseModel
-from .database import Base
-from datetime import datetime
+from api.database import Base
+
 
 # Contacts related to enhanced notes
 enhanced_note_contact_table = Table('enhanced_note_contact', Base.metadata,
@@ -30,24 +28,7 @@ enhanced_note_school_table = Table('enhanced_note_school', Base.metadata,
                                           ForeignKey('schools.id')),
                                    Column('enhanced_note_id', Integer,
                                           ForeignKey('enhanced_notes.id'))
-                                   )
-
-
-class ContactBase(BaseModel):
-    name: str
-
-
-class ContactCreate(ContactBase):
-    phone: str
-    email: str
-    school_id: Optional[int]
-
-
-class Contact(ContactBase):
-    id: int
-
-    class Config:
-        orm_mode = True
+                                )
 
 
 class DbContact(Base):
@@ -65,18 +46,6 @@ class DbContact(Base):
         "DbEnhancedNote",
         secondary=enhanced_note_contact_table,
         back_populates="contacts")
-
-
-class NoteCreate(BaseModel):
-    note: str
-    contact_id: int
-
-
-class Note(NoteCreate):
-    id: int
-
-    class Config:
-        orm_mode = True
 
 
 class DbNote(Base):
@@ -119,21 +88,12 @@ class DbSchool(Base):
         back_populates="schools")
 
 
-class TagCreate(BaseModel):
-    tag: str
-
-
-class Tag(TagCreate):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-
 class DbTag(Base):
     __tablename__ = "tags"
     id = Column(Integer, index=True, primary_key=True)
     tag = Column(String, unique=True)
+    type = Column(String)
+    description = Column(String)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     enhanced_notes = relationship(
@@ -142,34 +102,12 @@ class DbTag(Base):
         back_populates="tags")
 
 
-class EnhancedNoteBase(BaseModel):
-    note: str
-    tags: Optional[List[str]]
-    contacts: Optional[List[int]]
-    schools: Optional[List[int]]
-
-
-class EnhancedNoteCreate(EnhancedNoteBase):
-    start: Optional[datetime]
-    end: Optional[datetime]
-
-
-class EnhancedNote(EnhancedNoteCreate):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-
 class DbEnhancedNote(Base):
     __tablename__ = "enhanced_notes"
     id = Column(Integer, index=True, primary_key=True)
     note = Column(String)
     start = Column(DateTime(timezone=True), server_default=func.now())
     end = Column(DateTime(timezone=True), server_default=func.now())
-    contacts = relationship("DbContact")
-    schools = relationship("DbSchool")
-    tags = relationship("DbTag")
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     tags = relationship(

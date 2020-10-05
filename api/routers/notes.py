@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, Request
+from typing import List
 from sqlalchemy.orm import Session
-from api.models import Note, NoteCreate, DbNote, EnhancedNoteCreate, DbEnhancedNote, DbTag, DbSchool, DbContact
+from api.models.create import Note, NoteCreate, EnhancedNote, EnhancedNoteCreate
+from api.models.response import NoteResponse
 from api import note, enhanced_note
 
 router = APIRouter()
@@ -11,17 +13,17 @@ def get_db(request: Request):
     return request.state.db
 
 
-@router.get("/api/v1/notes")
+@router.get("/api/v1/notes", deprecated=True)
 def get_all_notes(db: Session = Depends(get_db)):
     return note.json_all(db)
 
 
-@router.get("/api/v1/notes/{contact_id}")
+@router.get("/api/v1/notes/{contact_id}", deprecated=True)
 def get_notes_by_contact_id(contact_id, db: Session = Depends(get_db)):
     return note.json_by_contact_id(contact_id, db)
 
 
-@router.post("/api/v1/note")
+@router.post("/api/v1/note", deprecated=True)
 async def post_note(note: NoteCreate, db: Session = Depends(get_db)):
     Note = DbNote(note=note.note, contact_id=note.contact_id)
     db.add(Note)
@@ -30,7 +32,7 @@ async def post_note(note: NoteCreate, db: Session = Depends(get_db)):
     return Note
 
 
-@router.get("/api/v2/notes")
+@router.get("/api/v2/notes", response_model=List[NoteResponse])
 def get_all_enhanced_notes(db: Session = Depends(get_db)):
     return enhanced_note.json_all(db)
 

@@ -1,6 +1,9 @@
+from typing import List
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
-from api.models import Contact, ContactCreate, DbContact
+from api.models.tables import DbContact
+from api.models.create import Contact, ContactCreate
+from api.models.response import ContactResponse
 from api import contact
 
 router = APIRouter()
@@ -11,17 +14,17 @@ def get_db(request: Request):
     return request.state.db
 
 
-@router.get("/api/v1/contacts")
+@router.get("/api/v1/contacts", response_model=List[ContactResponse])
 def get_all_contacts(db: Session = Depends(get_db)):
     return contact.json_all(db)
 
 
-@router.get("/api/v1/contacts/{search}")
+@router.get("/api/v1/contacts/{search}", response_model=List[ContactResponse])
 def searh_for_contacts(search, db: Session = Depends(get_db)):
     return contact.json_search(search, db)
 
 
-@router.get("/api/v1/contact/{id}")
+@router.get("/api/v1/contact/{id}", response_model=ContactResponse)
 def get_contact_by_id(id, db: Session = Depends(get_db)):
     return contact.json_by_id(id, db)
 

@@ -1,6 +1,6 @@
 import json
 
-from .models import DbSchool, DbContact
+from .models.tables import DbSchool, DbContact
 
 
 def get_school_query(db):

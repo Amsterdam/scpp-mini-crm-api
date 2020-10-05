@@ -1,13 +1,9 @@
-from .models import DbContact
+from .models.tables import DbContact
 
 
 def get_base_query(db):
     return db.query(
-        DbContact.id,
-        DbContact.naam,
-        DbContact.email,
-        DbContact.phone,
-        DbContact.school_id,
+        DbContact
     )
 
 
@@ -29,16 +25,13 @@ def construct_result(result):
 
 
 def json_by_id(id, db):
-    result = get_base_query(db).filter(DbContact.id == id).all()
-    print(result)
-    return construct_result(result)
+    return get_base_query(db).filter(DbContact.id == id).first()
 
 
 def json_search(search, db):
     search_filter = "%{}%".format(search)
-    result = get_base_query(db).filter(DbContact.naam.ilike(search_filter)).all()
-    return construct_result(result)
+    return get_base_query(db).filter(DbContact.naam.ilike(search_filter)).all()
+
 
 def json_all(db):
-    result = get_base_query(db).all()
-    return construct_result(result)
+    return get_base_query(db).all()
