@@ -16,7 +16,7 @@ class TagResponse(BaseModel):
 class ContactResponse(BaseModel):
     id: int
     type: Optional[str] = "Contact"
-    name: str = Field(alias='naam')
+    name: str = Field('naam')
     email: Optional[str] = None
     phone: Optional[str] = None
 
@@ -34,7 +34,7 @@ class SchoolResponse(BaseModel):
     school_type: str
     brin: Optional[str]
     vestigingsnummer: Optional[str]
-    name: str = Field(alias='naam')
+    name: str = Field('naam')
     address: str
 
     class Config:
