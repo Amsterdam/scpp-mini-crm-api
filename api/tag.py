@@ -6,6 +6,8 @@ def get_base_query(db):
     return db.query(
         DbTag.id,
         DbTag.tag,
+        DbTag.type,
+        DbTag.description,
         func.count(enhanced_note_tag_table.c['enhanced_note_id'])
     ).join(enhanced_note_tag_table, isouter=True)
 
@@ -22,6 +24,5 @@ def construct_result(result):
 
 
 def json_all(db):
-    result = get_base_query(db).group_by(DbTag.id).order_by(
+    return get_base_query(db).group_by(DbTag.id).order_by(
         func.count('enhanced_note_tag.enhanced_note_id').desc()).all()
-    return construct_result(result)

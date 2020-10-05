@@ -13,6 +13,6 @@ def get_db(request: Request):
     return request.state.db
 
 
-@router.get("/api/v1/tags", response_model=List[TagResponse])
+@router.get("/api/v1/tags", response_model=List[TagResponse], response_model_exclude_none=True)
 def get_all_tags(db: Session = Depends(get_db)):
     return tag.json_all(db)

@@ -5,7 +5,9 @@ from pydantic import BaseModel, Field
 class TagResponse(BaseModel):
     id: int
     tag: str
-    notes: Optional[int] = 0
+    type: Optional[str] = None
+    description: Optional[str] = None
+    notes: Optional[int] = None
 
     class Config:
         orm_mode = True
@@ -15,8 +17,8 @@ class ContactResponse(BaseModel):
     id: int
     type: Optional[str] = "Contact"
     name: str = Field(alias='naam')
-    email: Optional[str]
-    phone: Optional[str]
+    email: Optional[str] = None
+    phone: Optional[str] = None
 
     # school_id: Optional[int]
 

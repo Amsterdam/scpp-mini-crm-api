@@ -14,7 +14,7 @@ def get_db(request: Request):
     return request.state.db
 
 
-@router.get("/api/v1/contacts", response_model=List[ContactResponse])
+@router.get("/api/v1/contacts", response_model=List[ContactResponse], response_model_exclude_none=True)
 def get_all_contacts(db: Session = Depends(get_db)):
     return contact.json_all(db)
 
