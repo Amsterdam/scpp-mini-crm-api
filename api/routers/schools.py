@@ -25,3 +25,8 @@ def get_all_schools(db: Session = Depends(get_db)):
 @router.get("/api/v1/schools/{search}")
 def search_for_schools(search, db: Session = Depends(get_db)):
     return school.json_search(search, db)
+
+
+@router.get("/api/v2/school/{id}", response_model=SchoolResponse, response_model_exclude_none=True, response_model_by_alias=False)
+def get_school_by_id(id, db: Session = Depends(get_db)):
+    return school.by_id(id, db)

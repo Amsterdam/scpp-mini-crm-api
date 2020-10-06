@@ -2,9 +2,7 @@ from .models.tables import DbContact
 
 
 def get_base_query(db):
-    return db.query(
-        DbContact
-    )
+    return db.query(DbContact)
 
 
 def by_id(id, db):

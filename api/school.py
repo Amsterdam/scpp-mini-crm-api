@@ -3,6 +3,10 @@ import json
 from api.models.tables import DbSchool
 
 
+def get_clean_query(db):
+    return db.query(DbSchool)
+
+
 def get_base_query(db):
     return db.query(
         DbSchool.id,
@@ -96,6 +100,15 @@ def construct_result(result):
         }
         feature_collection.append(out)
     return feature_collection
+
+
+def by_id(id, db):
+    return get_clean_query(db).filter(DbSchool.id == id).first()
+
+
+def name_search(search, db):
+    search_filter = "%{}%".format(search)
+    return get_clean_query(db).filter(DbSchool.naam.ilike(search_filter)).all()
 
 
 def geojson_all(db):
