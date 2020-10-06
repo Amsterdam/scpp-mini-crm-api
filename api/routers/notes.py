@@ -33,12 +33,12 @@ async def post_note(note: NoteCreate, db: Session = Depends(get_db)):
     return Note
 
 
-@router.get("/api/v2/notes", response_model=List[NoteResponse])
+@router.get("/api/v2/notes", response_model=List[NoteResponse], response_model_exclude_none=True, response_model_by_alias=False)
 def get_all_enhanced_notes(db: Session = Depends(get_db)):
-    return enhanced_note.json_all(db)
+    return enhanced_note.all(db)
 
 
-@router.post("/api/v2/note")
+@router.post("/api/v2/note", response_model=NoteResponse, response_model_exclude_none=True, response_model_by_alias=False)
 async def post_enhanced_note(note: EnhancedNoteCreate, db: Session = Depends(get_db)):
     Note = DbEnhancedNote(note=note.note, start=note.start, end=note.end, contact_id=note.contact_id)
     # Check for tags; check database for existing tags and generate new ones when needed

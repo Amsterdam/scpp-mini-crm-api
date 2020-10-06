@@ -2,11 +2,6 @@ from api.models.tables import DbEnhancedNote
 from sqlalchemy.orm import joinedload
 
 
-def dump(obj):
-    for attr in dir(obj):
-        print("obj.%s = %r" % (attr, getattr(obj, attr)))
-
-
 def get_base_query(db):
     result = db.query(
         DbEnhancedNote,
@@ -19,6 +14,6 @@ def get_base_query(db):
     return result
 
 
-def json_all(db):
+def all(db):
     result = get_base_query(db).all()
     return result

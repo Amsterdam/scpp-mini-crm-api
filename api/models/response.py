@@ -1,4 +1,5 @@
 from typing import List, Optional
+from datetime import datetime
 from pydantic import BaseModel, Field
 
 
@@ -43,10 +44,12 @@ class SchoolResponse(BaseModel):
 
 class NoteResponse(BaseModel):
     contact: ContactResponse
-    note: Optional[str]
-    tags: Optional[List[TagResponse]] = []
-    contacts: Optional[List[ContactResponse]] = []
-    schools: Optional[List[SchoolResponse]] = []
+    note: str
+    tags: Optional[List[TagResponse]] = None
+    start: Optional[datetime] = None
+    end: Optional[datetime] = None
+    contacts: Optional[List[ContactResponse]] = None
+    schools: Optional[List[SchoolResponse]] = None
 
     class Config:
         orm_mode = True
