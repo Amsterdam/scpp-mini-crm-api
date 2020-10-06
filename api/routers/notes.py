@@ -40,7 +40,7 @@ def get_all_enhanced_notes(db: Session = Depends(get_db)):
 
 @router.post("/api/v2/note")
 async def post_enhanced_note(note: EnhancedNoteCreate, db: Session = Depends(get_db)):
-    Note = DbEnhancedNote(note=note.note, start=note.start, end=note.end)
+    Note = DbEnhancedNote(note=note.note, start=note.start, end=note.end, contact_id=note.contact_id)
     # Check for tags; check database for existing tags and generate new ones when needed
     if note.tags:
         # First get an array of the existing tags

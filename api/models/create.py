@@ -45,6 +45,7 @@ class Tag(TagCreate):
 
 class EnhancedNoteBase(BaseModel):
     note: str
+    contact_id: int
     tags: Optional[List[str]]
     contacts: Optional[List[int]]
     schools: Optional[List[int]]

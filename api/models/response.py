@@ -42,6 +42,7 @@ class SchoolResponse(BaseModel):
 
 
 class NoteResponse(BaseModel):
+    contact: ContactResponse
     note: Optional[str]
     tags: Optional[List[TagResponse]] = []
     contacts: Optional[List[ContactResponse]] = []

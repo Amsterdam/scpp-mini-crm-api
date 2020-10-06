@@ -105,6 +105,8 @@ class DbTag(Base):
 class DbEnhancedNote(Base):
     __tablename__ = "enhanced_notes"
     id = Column(Integer, index=True, primary_key=True)
+    contact_id = Column(Integer, ForeignKey('contacts.id'))
+    contact = relationship("DbContact", back_populates="enhanced_notes")
     note = Column(String)
     start = Column(DateTime(timezone=True), server_default=func.now())
     end = Column(DateTime(timezone=True), server_default=func.now())
