@@ -3,6 +3,7 @@ from typing import List
 from sqlalchemy.orm import Session
 from api.models.create import Note, NoteCreate, EnhancedNote, EnhancedNoteCreate
 from api.models.response import NoteResponse
+from api.models.tables import DbEnhancedNote, DbNote, DbTag, DbSchool, DbContact
 from api import note, enhanced_note
 
 router = APIRouter()
