@@ -16,17 +16,22 @@ def get_db(request: Request):
 
 @router.get("/api/v1/contacts", response_model=List[ContactResponse], response_model_exclude_none=True, response_model_by_alias=False)
 def get_all_contacts(db: Session = Depends(get_db)):
-    return contact.json_all(db)
+    return contact.all(db)
 
 
-@router.get("/api/v1/contacts/{search}", response_model=List[ContactResponse], response_model_by_alias=False)
+@router.get("/api/v1/contacts/{search}", response_model=List[ContactResponse], response_model_exclude_none=True, response_model_by_alias=False)
 def searh_for_contacts(search, db: Session = Depends(get_db)):
-    return contact.json_search(search, db)
+    return contact.name_search(search, db)
 
 
-@router.get("/api/v1/contact/{id}", response_model=ContactResponse, response_model_by_alias=False)
+@router.get("/api/v2/phone/{search}", response_model=List[ContactResponse], response_model_exclude_none=True, response_model_by_alias=False)
+def searh_contacts_by_phone_number(search, db: Session = Depends(get_db)):
+    return contact.phone_search(search, db)
+
+
+@router.get("/api/v1/contact/{id}", response_model=ContactResponse, response_model_exclude_none=True, response_model_by_alias=False)
 def get_contact_by_id(id, db: Session = Depends(get_db)):
-    return contact.json_by_id(id, db)
+    return contact.by_id(id, db)
 
 
 @router.post("/api/v1/contact")

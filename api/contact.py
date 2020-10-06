@@ -7,31 +7,19 @@ def get_base_query(db):
     )
 
 
-def construct_result(result):
-    feature_collection = []
-
-    for entry in result:
-        out = {
-            "type": "Contact",
-            "id": entry[0],
-            "name": entry[1],
-            "email": entry[2],
-            "phone": entry[3],
-            "school_id": entry[4]
-        }
-        feature_collection.append(out)
-
-    return feature_collection
-
-
-def json_by_id(id, db):
+def by_id(id, db):
     return get_base_query(db).filter(DbContact.id == id).first()
 
 
-def json_search(search, db):
+def name_search(search, db):
     search_filter = "%{}%".format(search)
     return get_base_query(db).filter(DbContact.naam.ilike(search_filter)).all()
 
 
-def json_all(db):
+def phone_search(search, db):
+    search_filter = "%{}%".format(search)
+    return get_base_query(db).filter(DbContact.phone.ilike(search_filter)).all()
+
+
+def all(db):
     return get_base_query(db).all()
