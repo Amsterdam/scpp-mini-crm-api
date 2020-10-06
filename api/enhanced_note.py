@@ -9,7 +9,7 @@ def get_base_query(db):
         joinedload(DbEnhancedNote.schools)
     ).options(
         joinedload(DbEnhancedNote.tags)
-    ).options(joinedload(DbEnhancedNote.contacts))
+    ).options(joinedload(DbEnhancedNote.contacts)).order_by(DbEnhancedNote.start.desc())
 
     return result
 
