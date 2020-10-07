@@ -38,6 +38,16 @@ def get_all_enhanced_notes(db: Session = Depends(get_db)):
     return enhanced_note.all(db)
 
 
+@router.get("/api/v2/school/{id}/notes", response_model=List[NoteResponse], response_model_exclude_none=True, response_model_by_alias=False)
+def get_notes_for_school(id, db: Session = Depends(get_db)):
+    return enhanced_note.for_school_by_id(id, db)
+
+
+@router.get("/api/v2/contact/{id}/notes", response_model=List[NoteResponse], response_model_exclude_none=True, response_model_by_alias=False)
+def get_notes_for_contact(id, db: Session = Depends(get_db)):
+    return enhanced_note.for_contact_by_id(id, db)
+
+
 @router.post("/api/v2/note", response_model=NoteResponse, response_model_exclude_none=True, response_model_by_alias=False)
 async def post_enhanced_note(note: EnhancedNoteCreate, db: Session = Depends(get_db)):
     Note = DbEnhancedNote(note=note.note, start=note.start, end=note.end, contact_id=note.contact_id)
