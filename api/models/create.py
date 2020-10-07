@@ -8,7 +8,7 @@ class ContactBase(BaseModel):
 
 
 class ContactCreate(ContactBase):
-    phone: str
+    phone: Optional[str]
     email: Optional[str]
     school_id: Optional[int]
 
