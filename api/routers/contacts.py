@@ -1,5 +1,6 @@
 from typing import List
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, HTTPException
+from sqlalchemy import exc
 from sqlalchemy.orm import Session
 from api.models.tables import DbContact
 from api.models.create import Contact, ContactCreate
@@ -46,7 +47,7 @@ async def post_contact(contact: ContactCreate, db: Session = Depends(get_db)):
     try:
         db.commit()
         db.refresh(Contact)
-    except IntegrityError:
+    except exc.IntegrityError:
         raise HTTPException(
-            status_code=500, detail="Duplicate Contact, did you mean to update?")
+            status_code=400, detail="contact exists: %s" % contact.name)
     return Contact
