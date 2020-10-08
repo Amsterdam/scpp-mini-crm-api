@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Request
 from typing import List
 from sqlalchemy.orm import Session
 from api import school
-from api.models.response import SchoolResponse
+from api.models.response import SchoolResponse, SchoolDetailResponse
 
 router = APIRouter()
 
@@ -28,5 +28,9 @@ def search_for_schools(search, db: Session = Depends(get_db)):
 
 
 @router.get("/api/v2/school/{id}", response_model=SchoolResponse, response_model_exclude_none=True, response_model_by_alias=False)
+def get_school_by_id(id, db: Session = Depends(get_db)):
+    return school.by_id(id, db)
+
+@router.get("/api/v3/school/{id}", response_model=SchoolDetailResponse, response_model_exclude_none=True, response_model_by_alias=False)
 def get_school_by_id(id, db: Session = Depends(get_db)):
     return school.by_id(id, db)
