@@ -4,8 +4,6 @@ from .routers import notes, schools, contacts, search, tags
 from .database import SessionLocal, engine, Base
 from .settings import settings
 
-Base.metadata.create_all(bind=engine)
-
 app = FastAPI()
 
 
