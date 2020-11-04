@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 LABEL maintainer="Milo van der Linden - https://www.tiltshiftapps.nl"
 
-ENV SQL_ALCHEMY_DATABASE_URL "postgresql://postgres:postgres@localhost/postgres"
+ENV DATABASE_URL "postgresql://postgres:postgres@localhost/postgres"
 ENV BACKEND_CORS_ORIGINS "http://localhost,http://localhost:4200,http://localhost:3000"
 ENV AMSTERDAM_PRIMARY_SCHOOLS "https://schoolwijzer.amsterdam.nl/nl/api/v1/lijst/po"
 ENV AMSTERDAM_HIGH_SCHOOLS "https://schoolwijzer.amsterdam.nl/nl/api/v1/lijst/vo"

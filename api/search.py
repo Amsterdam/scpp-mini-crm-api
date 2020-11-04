@@ -1,5 +1,3 @@
-import json
-
 from .models.tables import DbSchool, DbContact
 
 
