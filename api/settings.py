@@ -5,7 +5,7 @@ from pydantic import AnyHttpUrl, BaseSettings, validator
 
 
 class Settings(BaseSettings):
-    SQL_ALCHEMY_DATABASE_URL = os.environ.get('SQL_ALCHEMY_DATABASE_URL',
+    ATABASE_URL = os.environ.get('DATABASE_URL',
                                               "postgresql://postgres:postgres@localhost/postgres")
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = [x.strip() for x in os.environ.get(
         'BACKEND_CORS_ORIGINS', "http://localhost,http://localhost:4200,http://localhost:3000").split(',')]
