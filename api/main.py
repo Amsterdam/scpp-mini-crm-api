@@ -1,7 +1,7 @@
-from fastapi import Depends, FastAPI, Request, Response
+from fastapi import FastAPI, Request, Response
 from starlette.middleware.cors import CORSMiddleware
 from .routers import notes, schools, contacts, search, tags, maintenance
-from .database import SessionLocal, engine
+from .database import SessionLocal
 from .settings import settings
 
 app = FastAPI()

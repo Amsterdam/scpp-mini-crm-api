@@ -3,8 +3,10 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 from geoalchemy2 import elements
 
+
 def tuple_to_point(coord_tuple: Tuple)->str:
     return f'POINT({coord_tuple[0]} {coord_tuple[1]})'
+
 
 class TagResponse(BaseModel):
     id: int

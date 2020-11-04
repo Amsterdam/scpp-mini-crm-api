@@ -1,10 +1,7 @@
 from fastapi import APIRouter, Depends, Request, HTTPException
-from typing import List
 from sqlalchemy.orm import Session
 import datetime
 from api.database import engine, Base
-from api import school
-from api.models.response import SchoolResponse, SchoolDetailResponse
 
 router = APIRouter()
 
@@ -22,15 +19,15 @@ def get_status_database(db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="No database connection")
     finally:
         db.close()
-    return { "detail": "database connection OK" }
+    return {"detail": "database connection OK"}
 
 
 @router.get("/api/status/health")
 def get_status_health():
-    return { "detail": "api OK" }
+    return {"detail": "api OK"}
 
 
 @router.get("/api/status/time")
 def get_status_health():
-    currentDT = datetime.datetime.now()
-    return { "detail": { "time": currentDT } }
+    current_datetime = datetime.datetime.now()
+    return {"detail": {"time": current_datetime}}
