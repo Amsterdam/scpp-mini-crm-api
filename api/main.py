@@ -1,10 +1,8 @@
-from fastapi import Depends, FastAPI, Request, Response
+from fastapi import FastAPI, Request, Response
 from starlette.middleware.cors import CORSMiddleware
-from .routers import notes, schools, contacts, search, tags
-from .database import SessionLocal, engine, Base
+from .routers import notes, schools, contacts, search, tags, maintenance
+from .database import SessionLocal
 from .settings import settings
-
-Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -39,3 +37,4 @@ app.include_router(schools.router)
 app.include_router(contacts.router)
 app.include_router(search.router)
 app.include_router(tags.router)
+app.include_router(maintenance.router)
