@@ -1,4 +1,4 @@
-from adapters.amsterdam import schools
+from adapters.amsterdam import schools, tags
 
 
 def run_jobs():
@@ -6,6 +6,7 @@ def run_jobs():
     Run the adapters to get data from remote sources.
     """
     schools.run()
+    tags.run()
     
 
 if __name__ == "__main__":

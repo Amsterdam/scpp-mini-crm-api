@@ -2,7 +2,7 @@ from .settings import settings
 import json
 import urllib.request
 from api.database import SessionLocal, engine
-from api.models import DbSchool
+from api.models.tables import DbSchool
 from geoalchemy2 import functions
 
 import ssl
@@ -34,7 +34,7 @@ def run_po():
                 brin = entry["brin"],
                 vestigingsnummer = entry["vestigingsnummer"],
                 school_type = "po",
-                name = entry["naam"],
+                naam = entry["naam"],
                 grondslag = entry["grondslag"],
                 schoolwijzer_url = entry["schoolwijzer_url"],
                 address = entry["adres"]["adres"],

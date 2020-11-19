@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request, Response
 from starlette.middleware.cors import CORSMiddleware
-from .routers import notes, schools, contacts, search, tags, maintenance
+from .routers import notes, schools, contacts, search, tags, maintenance, jobs
 from .database import SessionLocal
 from .settings import settings
 
@@ -38,3 +38,4 @@ app.include_router(contacts.router)
 app.include_router(search.router)
 app.include_router(tags.router)
 app.include_router(maintenance.router)
+app.include_router(jobs.router)
