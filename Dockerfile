@@ -22,4 +22,4 @@ COPY . .
 
 EXPOSE 8000
 VOLUME ["/usr/src/app/data"]
-CMD [ "python", "./mini-crm.py" ]
+CMD [ "./mini-crm.sh" ]
