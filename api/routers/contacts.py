@@ -6,37 +6,36 @@ from api.models.tables import DbContact
 from api.models.create import Contact, ContactCreate
 from api.models.response import ContactResponse
 from api import contact
+from ..dependencies import get_user
 
 router = APIRouter()
-
 
 # Dependency
 def get_db(request: Request):
     return request.state.db
 
-
 @router.get("/api/v1/contacts", response_model=List[ContactResponse], response_model_exclude_none=True, response_model_by_alias=False)
-def get_all_contacts(db: Session = Depends(get_db)):
+def get_all_contacts(db: Session = Depends(get_db), user: str = Depends(get_user)):
     return contact.all(db)
 
 
 @router.get("/api/v1/contacts/{search}", response_model=List[ContactResponse], response_model_exclude_none=True, response_model_by_alias=False)
-def searh_for_contacts(search, db: Session = Depends(get_db)):
+def searh_for_contacts(search, db: Session = Depends(get_db), user: str = Depends(get_user)):
     return contact.name_search(search, db)
 
 
 @router.get("/api/v2/phone/{search}", response_model=List[ContactResponse], response_model_exclude_none=True, response_model_by_alias=False)
-def searh_contacts_by_phone_number(search, db: Session = Depends(get_db)):
+def searh_contacts_by_phone_number(search, db: Session = Depends(get_db), user: str = Depends(get_user)):
     return contact.phone_search(search, db)
 
 
 @router.get("/api/v1/contact/{id}", response_model=ContactResponse, response_model_exclude_none=True, response_model_by_alias=False)
-def get_contact_by_id(id, db: Session = Depends(get_db)):
+def get_contact_by_id(id, db: Session = Depends(get_db), user: str = Depends(get_user)):
     return contact.by_id(id, db)
 
 
 @router.post("/api/v1/contact")
-async def post_contact(contact: ContactCreate, db: Session = Depends(get_db)):
+async def post_contact(contact: ContactCreate, db: Session = Depends(get_db), user: str = Depends(get_user)):
     if contact.school_id and contact.school_id > 0:
         Contact = DbContact(naam=contact.name, email=contact.email,
                             phone=contact.phone, school_id=contact.school_id)
