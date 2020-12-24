@@ -37,6 +37,7 @@ class DbContact(Base):
     naam = Column(String, unique=True, index=True)
     email = Column(String)
     phone = Column(String)
+    reference = Column(String)
     school_id = Column(Integer, ForeignKey('schools.id'))
     school = relationship("DbSchool", back_populates="contacts")
     created_at = Column(DateTime(timezone=True), server_default=func.now())

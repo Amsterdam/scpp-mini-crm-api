@@ -25,6 +25,7 @@ class ContactResponse(BaseModel):
     name: str = Field(...,alias='naam')
     email: Optional[str] = None
     phone: Optional[str] = None
+    reference: Optional[str] = None
 
     # school_id: Optional[int]
 
@@ -37,7 +38,7 @@ class SchoolDetailResponse(BaseModel):
     id: int
     school_id: Optional[int]
     lrkp_id: Optional[int]
-    school_type: str = None
+    school_type: Optional[str] = None
     brin: Optional[str] = None
     vestigingsnummer: Optional[str] = None
     name: str = Field(...,alias='naam')
@@ -46,7 +47,7 @@ class SchoolDetailResponse(BaseModel):
     onderwijsconcept: Optional[str] = None
     heeft_voorschool: Optional[bool] = None
     leerlingen: Optional[int] = None
-    address: str
+    address: Optional[str]
     postcode: Optional[str] = None
     suburb: Optional[str] = None
     website: Optional[str] = None
@@ -64,17 +65,18 @@ class SchoolResponse(BaseModel):
     id: int
     school_id: Optional[int]
     lrkp_id: Optional[int]
-    school_type: str
+    school_type: Optional[str]
     brin: Optional[str]
     vestigingsnummer: Optional[str]
     name: str = Field(...,alias='naam')
-    address: str
+    address: Optional[str]
 
     class Config:
         orm_mode = True
 
 
 class NoteResponse(BaseModel):
+    id: int
     contact: ContactResponse
     note: str
     tags: Optional[List[TagResponse]] = None

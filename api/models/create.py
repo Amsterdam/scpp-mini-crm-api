@@ -10,6 +10,7 @@ class ContactBase(BaseModel):
 class ContactCreate(ContactBase):
     phone: Optional[str]
     email: Optional[str]
+    reference: Optional[str]
     school_id: Optional[int]
 
 
