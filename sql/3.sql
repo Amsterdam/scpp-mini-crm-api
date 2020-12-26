@@ -8,6 +8,10 @@ BEGIN
 		RETURN FALSE;
 	END IF;
     ALTER TABLE public.contacts ADD COLUMN reference character varying;
+    --- truncate tag and related tables assume we don't have production data yet
+    TRUNCATE TABLE public.tags CASCADE;
+    ALTER SEQUENCE public.tags_id_seq RESTART WITH 1000;
+    --- start values
     INSERT INTO public.tags(id, tag, type, description, created_at, updated_at) VALUES (1,'parkeervergunning','default','Parkeervergunning (PVG)','2020-10-05 13:01:51.712308+00',NULL);
     INSERT INTO public.tags(id, tag, type, description, created_at, updated_at) VALUES (2,'wonen','default','Wonen (W)','2020-10-05 13:01:51.712308+00',NULL);
     INSERT INTO public.tags(id, tag, type, description, created_at, updated_at) VALUES (11,'reiskostenvergoeding','default','Reiskostenvergoeding (RKV)','2020-11-19 10:57:14.488303+00',NULL);
@@ -18,7 +22,8 @@ BEGIN
     INSERT INTO public.tags(id, tag, type, description, created_at, updated_at) VALUES (16,'vraag','default','Vraag','2020-11-19 10:57:14.497452+00',NULL);
     INSERT INTO public.tags(id, tag, type, description, created_at, updated_at) VALUES (17,'klacht','default','Klacht','2020-11-19 10:57:14.497452+00',NULL);
     INSERT INTO public.tags(id, tag, type, description, created_at, updated_at) VALUES (18,'melding','default','Melding','2020-11-19 10:57:14.497452+00',NULL);
-    
+
+
 	INSERT INTO dbmigration ("version", "executed_on") VALUES (3, CURRENT_TIMESTAMP);
 	RETURN TRUE;
 END;
