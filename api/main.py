@@ -22,10 +22,9 @@ async def db_session_middleware(request: Request, call_next):
 def get_db(request: Request):
     return request.state.db
 
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS_CSV],
+    allow_origins=settings.BACKEND_CORS_ORIGINS_CSV.split(','),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
