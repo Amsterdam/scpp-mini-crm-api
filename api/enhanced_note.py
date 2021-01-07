@@ -23,7 +23,11 @@ def for_contact_by_id(id, db):
     # First get contact
     contact = db.query(DbContact).filter(DbContact.id == id).first()
     search_filter = "%{}%".format(contact.naam)
-    result = get_base_query(db).filter((DbEnhancedNote.note.ilike(search_filter)) | (DbEnhancedNote.contact_id == contact.id)).all()
+    result = get_base_query(db).filter(
+            DbEnhancedNote.note.ilike(search_filter) |
+            (DbEnhancedNote.contact_id == contact.id) | 
+            (DbEnhancedNote.contacts.any(DbContact.id == contact.id))
+        ).all()
     
     return result
 
@@ -31,7 +35,11 @@ def for_contact_by_id(id, db):
 def for_school_by_id(id, db):
     # First get school
     school = db.query(DbSchool).filter(DbSchool.id == id).first()
+    print(school.id)
     search_filter = "%{}%".format(school.naam)
-    result = get_base_query(db).filter(DbEnhancedNote.note.ilike(search_filter)).all()
+    result = get_base_query(db).filter(
+        DbEnhancedNote.note.ilike(search_filter) | 
+        (DbEnhancedNote.schools.any(DbSchool.id == school.id))
+    ).all()
 
     return result
