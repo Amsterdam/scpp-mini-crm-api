@@ -35,7 +35,6 @@ def for_contact_by_id(id, db):
 def for_school_by_id(id, db):
     # First get school
     school = db.query(DbSchool).filter(DbSchool.id == id).first()
-    print(school.id)
     search_filter = "%{}%".format(school.naam)
     result = get_base_query(db).filter(
         DbEnhancedNote.note.ilike(search_filter) | 
