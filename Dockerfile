@@ -10,7 +10,7 @@ ENV AMSTERDAM_PRIMARY_SCHOOLS "https://schoolwijzer.amsterdam.nl/nl/api/v1/lijst
 ENV AMSTERDAM_HIGH_SCHOOLS "https://schoolwijzer.amsterdam.nl/nl/api/v1/lijst/vo"
 ENV AMSTERDAM_KINDERGARTEN "https://schoolwijzer.amsterdam.nl/nl/api/v1/lijst/opvang"
 ENV AMSTERDAM_DAYCARE "https://schoolwijzer.amsterdam.nl/nl/api/v1/lijst/bso"
-
+ENV USERS '{"demo": "test12345"}'
 
 RUN apt-get update && apt-get install -y \
     gcc postgresql-client libpq-dev
